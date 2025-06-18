@@ -10,8 +10,18 @@ import Bread from "./components/Bread.tsx";
 import {navItems, productItems} from "./configurations/nav-config.ts";
 import ErrorPage from "./components/ErrorPage.tsx";
 import NavigatorDeskTop from "./components/navigation/NavigatorDeskTop.tsx";
+import Login from "./components/singIn/Login.tsx";
+
+export type Login = {
+    email: string;
+    password: string;
+}
 
 function App() {
+
+    const login = (info: Login) => {
+        console.log(JSON.stringify(info));
+    }
 
     return (
         <Routes>
@@ -22,6 +32,7 @@ function App() {
                 <Route path={Paths.CUSTOMERS} element={<Customers/>}/>
                 <Route path={Paths.ORDERS} element={<Orders/>}/>
                 <Route path={Paths.CART} element={<ShoppingCart/>}/>
+                <Route path={Paths.LOGIN} element={<Login singIn={login}/>}/>
                 {/*<Route path={Paths.PRODUCTS} element={<Products/>}/>*/}
                 {/*<Route path={Paths.PRODUCTS} element={<ProductLayout/>}>*/}
                 <Route path={Paths.PRODUCTS} element={<NavigatorDeskTop items={productItems}/>}>
