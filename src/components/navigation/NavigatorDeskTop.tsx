@@ -10,7 +10,7 @@ type Props = {
 }
 
 const NavigatorDeskTop: FC<Props> = ({items}) => {
-
+    console.log(items);
     const [value, setValue] = useState(0)
     const handleOnChange = (_e: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)
