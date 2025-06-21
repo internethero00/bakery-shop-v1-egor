@@ -13,14 +13,17 @@ import NavigatorDeskTop from "./components/navigation/NavigatorDeskTop.tsx";
 import Logout from "./components/Logout.tsx";
 import Login from "./components/singIn/Login.tsx";
 import {useAppSelector} from "./redux/hooks.ts";
+import Registration from "./components/singIn/Registration.tsx";
 
 
 function App() {
     const {authUser} = useAppSelector(state => state.auth);
 
     const predicate = (item: RouteType) => {
-        return (item.role === Roles.ALL || item.role === Roles.USER && authUser || item.role === Roles.ADMIN && authUser
-        && authUser.includes('admin') || item.role === Roles.NO_AUTH && !authUser);
+        return (item.role === Roles.ALL
+            || item.role === Roles.USER && authUser && !(item.path === Paths.CART && authUser.includes('admin'))
+            || item.role === Roles.ADMIN && authUser && authUser.includes('admin')
+            || item.role === Roles.NO_AUTH && !authUser);
     }
 
     const getRoutes = () => {
@@ -41,6 +44,7 @@ function App() {
                 <Route path={Paths.CART} element={<ShoppingCart/>}/>
                 <Route path={Paths.LOGIN} element={<Login/>}/>
                 <Route path={Paths.LOGOUT} element={<Logout/>}/>
+                <Route path={Paths.SIGNUP} element={<Registration/>}/>
                 {/*<Route path={Paths.PRODUCTS} element={<Products/>}/>*/}
                 {/*<Route path={Paths.PRODUCTS} element={<ProductLayout/>}>*/}
                 <Route path={Paths.PRODUCTS} element={<NavigatorDeskTop items={productItems}/>}>

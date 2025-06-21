@@ -10,6 +10,7 @@ export enum Paths {
     BACK = 'back',
     LOGIN = 'login',
     LOGOUT = 'logout',
+    SIGNUP = 'signup',
 }
 
 export enum Roles {
