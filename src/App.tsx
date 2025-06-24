@@ -12,19 +12,26 @@ import ErrorPage from "./components/ErrorPage.tsx";
 import NavigatorDeskTop from "./components/navigation/NavigatorDeskTop.tsx";
 import Logout from "./components/Logout.tsx";
 import Login from "./components/singIn/Login.tsx";
-import {useAppSelector} from "./redux/hooks.ts";
 import Registration from "./components/singIn/Registration.tsx";
 
 
+
 function App() {
-    const {authUser} = useAppSelector(state => state.auth);
 
     const predicate = (item: RouteType) => {
-        return (item.role === Roles.ALL
-            || item.role === Roles.USER && authUser && !(item.path === Paths.CART && authUser.includes('admin'))
-            || item.role === Roles.ADMIN && authUser && authUser.includes('admin')
-            || item.role === Roles.NO_AUTH && !authUser);
+        if (!localStorage.getItem('authorization')){
+            return (item.role === Roles.ALL
+                || item.role === Roles.NO_AUTH && !localStorage.getItem('authorization'));
+        }
+        else if (localStorage.getItem('authorization')){
+            return (item.role === Roles.ALL
+                || item.role === Roles.USER && localStorage.getItem('authorization') && !(item.path === Paths.CART && String(localStorage.getItem('authorization')).includes('admin'))
+                || item.role === Roles.ADMIN && localStorage.getItem('authorization') && String(localStorage.getItem('authorization')).includes('admin')
+                || item.role === Roles.NO_AUTH && !localStorage.getItem('authorization'));
+        }
+
     }
+
 
     const getRoutes = () => {
         return navItems.filter(item =>

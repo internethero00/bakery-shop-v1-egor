@@ -4,17 +4,19 @@ import {AppBar, Box, Tab, Tabs} from "@mui/material";
 import * as React from "react";
 import {Outlet, Link} from "react-router-dom";
 
+
 type Props = {
     items: RouteType[]
     sub?: string
 }
 
 const NavigatorDeskTop: FC<Props> = ({items}) => {
-    console.log(items);
     const [value, setValue] = useState(0)
     const handleOnChange = (_e: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)
     }
+    const nav = [...items]
+    console.log(nav)
     return (
         <Box sx={{mt: "50px"}}>
             <AppBar sx={{backgroundColor: "lightgray"}}>
