@@ -1,11 +1,13 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 type AuthState = {
-    authUser: string
+    authUser: string,
+    authName: string,
 }
 
 const initialState: AuthState = {
     authUser: "",
+    authName: "",
 }
 
 
@@ -18,9 +20,15 @@ const authSlice = createSlice({
         },
         logoutAction: (state) => {
             state.authUser = "";
+        },
+        putNicknameAction: (state, action) => {
+            state.authName = action.payload || "ADMIN";
+        },
+        deleteNicknameAction: (state) => {
+            state.authName = ''
         }
     }
 })
 
-export const { loginAction, logoutAction } = authSlice.actions;
+export const { loginAction, logoutAction, putNicknameAction, deleteNicknameAction } = authSlice.actions;
 export const authReducer =  authSlice.reducer;

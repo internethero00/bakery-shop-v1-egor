@@ -1,11 +1,22 @@
 import Button from "@mui/material/Button";
 import {useAppDispatch} from "../redux/hooks.ts";
-import {logoutAction} from "../redux/slices/authSlice.ts";
+import {deleteNicknameAction, logoutAction} from "../redux/slices/authSlice.ts";
 import {useNavigate} from "react-router-dom";
+import {getAuth, onAuthStateChanged} from "firebase/auth";
 
 const Logout = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch()
+
+    const deleteNickname = () => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, (user) => {
+            if (user)
+                dispatch(deleteNicknameAction())
+
+        })
+    }
+
     return (
         <div>
             <Button variant={"contained"} onClick={() => {
@@ -13,7 +24,8 @@ const Logout = () => {
                 localStorage.clear()
                 dispatch(logoutAction());
                 navigate('/')
-                window.location.reload();
+                deleteNickname()
+                // window.location.reload();
 
             }}>
                 Logout

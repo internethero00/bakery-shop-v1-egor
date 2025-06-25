@@ -192,7 +192,7 @@ const SignInForm = ({singIn}: LoginProps) => {
                         <Button
                             fullWidth
                             variant="outlined"
-                            onClick={() => alert('Sign in with Google')}
+                            onClick={() => singIn({email: "GOOGLE", password: ""})}
                             startIcon={<GoogleIcon/>}
                         >
                             Sign in with Google

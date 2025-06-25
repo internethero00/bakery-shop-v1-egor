@@ -2,7 +2,6 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import Link from '@mui/material/Link';
@@ -11,10 +10,9 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import MuiCard from '@mui/material/Card';
 import {styled} from '@mui/material/styles';
-import {GoogleIcon} from "./singIn/customIcons/CustomIcons.tsx";
 import {SitemarkIcon} from "./singIn/customIcons/CustomIcons.tsx";
 import {useNavigate} from "react-router-dom";
-import {Paths} from "../utils/shop-types.ts";
+import {Paths, type SignUpData} from "../utils/shop-types.ts";
 
 const Card = styled(MuiCard)(({theme}) => ({
     display: 'flex',
@@ -57,8 +55,10 @@ const SignUpContainer = styled(Stack)(({theme}) => ({
         }),
     },
 }));
-
-export default function SignUp() {
+type Props = {
+    submitFunc: (data: SignUpData) => void;
+}
+export default function SignUpForm(props : Props) {
     const [emailError, setEmailError] = React.useState(false);
     const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
     const [passwordError, setPasswordError] = React.useState(false);
@@ -105,16 +105,16 @@ export default function SignUp() {
     };
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         if (nameError || emailError || passwordError) {
             event.preventDefault();
             return;
         }
         const data = new FormData(event.currentTarget);
-        console.log({
-            name: data.get('name'),
-            lastName: data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
+        props.submitFunc({
+            name: data.get('name') as string,
+            email: data.get('email') as string,
+            password: data.get('password') as string,
         });
     };
 
@@ -198,18 +198,7 @@ export default function SignUp() {
                             Sign up
                         </Button>
                     </Box>
-                    <Divider>
-                        <Typography sx={{color: 'text.secondary'}}>or</Typography>
-                    </Divider>
                     <Box sx={{display: 'flex', flexDirection: 'column', gap: 2}}>
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            onClick={() => alert('Sign up with Google')}
-                            startIcon={<GoogleIcon/>}
-                        >
-                            Sign up with Google
-                        </Button>
                         <Typography sx={{textAlign: 'center'}}>
                             Already have an account?{' '}
                             <Link

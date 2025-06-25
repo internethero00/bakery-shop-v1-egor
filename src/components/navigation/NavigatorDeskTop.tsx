@@ -4,6 +4,9 @@ import {AppBar, Box, Tab, Tabs} from "@mui/material";
 import * as React from "react";
 import {Outlet, Link} from "react-router-dom";
 
+import {useAppSelector} from "../../redux/hooks.ts";
+
+
 
 type Props = {
     items: RouteType[]
@@ -11,12 +14,13 @@ type Props = {
 }
 
 const NavigatorDeskTop: FC<Props> = ({items}) => {
+    const nickname = useAppSelector(state => state.auth.authName);
     const [value, setValue] = useState(0)
     const handleOnChange = (_e: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)
     }
-    const nav = [...items]
-    console.log(nav)
+
+
     return (
         <Box sx={{mt: "50px"}}>
             <AppBar sx={{backgroundColor: "lightgray"}}>
@@ -24,6 +28,7 @@ const NavigatorDeskTop: FC<Props> = ({items}) => {
                     {items.map(item =>
                         <Tab key={item.path} component={Link} to={item.path} label={item.title} />
                     )}
+                    <Tab sx={{marginLeft: 'auto'}} disabled key={"log"} label={nickname} />
                 </Tabs>
             </AppBar>
             <Outlet/>
