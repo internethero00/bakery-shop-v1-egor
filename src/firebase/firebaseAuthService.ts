@@ -32,6 +32,7 @@ export const login = async (data: LoginType) => {
 export const registerWithEmailAndPassword = async (data: SignUpData) => {
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+        console.log(userCredential)
         const user = userCredential.user;
 
         if (user) {
