@@ -3,9 +3,11 @@ import {db} from "../configurations/fireBase-config.ts";
 import type {Category, ProductType} from "../utils/shop-types.ts";
 import {getRandomNumber} from "../utils/tools.ts";
 import productConfig from '../configurations/products-config.json'
+import {Observable} from "rxjs";
+import {collectionData} from 'rxfire/firestore'
 
 const prodColl = collection(db, "product_collection");
-const categoryCall = collection(db, "category_collection");
+const categoryColl = collection(db, "category_collection");
 
 export const addProduct = async (product: ProductType) => {
     product.id = getRandomNumber(10000, 99999) + ""
@@ -14,8 +16,8 @@ export const addProduct = async (product: ProductType) => {
 }
 
 export const addCategory = async (category: Category) => {
-    const ref = doc(categoryCall, category.category_name);
-    await setDoc(ref, categoryCall);
+    const ref = doc(categoryColl, category.category_name);
+    await setDoc(ref, category);
 }
 
 export const removeProduct = async (id: string) => {
@@ -27,7 +29,7 @@ export const removeProduct = async (id: string) => {
 }
 
 export const removeCategory = async (name: string) => {
-    const ref = doc(categoryCall, name);
+    const ref = doc(categoryColl, name);
     const removed = await getDoc(ref)
     console.log(removed.data())
     await deleteDoc(ref);
@@ -40,8 +42,9 @@ export const getProduct = async (id: string) => {
 }
 
 export const isCategoryExist = async (name: string) => {
-    const ref = doc(categoryCall, name);
+    const ref = doc(categoryColl, name);
     const res = await getDoc(ref)
+    console.log(res)
     return res.exists()
 }
 
@@ -51,7 +54,7 @@ export const setProducts = async () => {
         const products: ProductType[] = productConfig.map(item => (
             {
                 title: item.name,
-                category: item.name.split("-")[0],
+                category: item.name.split('-')[0],
                 unit: item.unit,
                 cost: item.cost,
                 img: item.name + '.jpg',
@@ -59,7 +62,7 @@ export const setProducts = async () => {
         ))
         for (let i = 0; i < products.length; i++) {
             const temp = await isCategoryExist(products[i].category)
-            if (temp!) {
+            if (!temp) {
                 await addCategory({category_name: products[i].category})
             }
             await addProduct(products[i]);
@@ -69,4 +72,9 @@ export const setProducts = async () => {
     }
     return count
 
+}
+
+
+export const getProducts = ():Observable<ProductType[]> => {
+    return collectionData(prodColl) as Observable<ProductType[]>
 }

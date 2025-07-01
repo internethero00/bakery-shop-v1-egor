@@ -1,6 +1,6 @@
 import './App.css'
 import {Navigate, Route, Routes} from "react-router-dom";
-import {Paths, Roles, type RouteType} from "./utils/shop-types.ts";
+import {Paths, type ProductType, Roles, type RouteType} from "./utils/shop-types.ts";
 import Home from "./components/Home.tsx";
 import Customers from "./components/Customers.tsx";
 import Orders from "./components/Orders.tsx";
@@ -13,12 +13,16 @@ import NavigatorDeskTop from "./components/navigation/NavigatorDeskTop.tsx";
 import Logout from "./components/Logout.tsx";
 import Login from "./components/singIn/Login.tsx";
 import Registration from "./components/singIn/Registration.tsx";
-import {useAppSelector} from "./redux/hooks.ts";
+import {useAppDispatch, useAppSelector} from "./redux/hooks.ts";
+import {useEffect} from "react";
+import {getProducts} from "./firebase/firebaseDBService.ts";
+import {prodsUpd} from "./redux/slices/productSlice.ts";
 
 
 
 function App() {
 
+    const dispatch = useAppDispatch();
     const {authUser} = useAppSelector(state => state.auth);
 
     const predicate = (item: RouteType) => {
@@ -30,7 +34,14 @@ function App() {
 
 
     }
-
+    useEffect(() => {
+        const subscription = getProducts().subscribe({
+            next: (prods: ProductType[]) => {
+                dispatch(prodsUpd(prods));
+            },
+        })
+        return () => {subscription.unsubscribe()}
+    }, []);
 
     const getRoutes = () => {
         return navItems.filter(item =>
