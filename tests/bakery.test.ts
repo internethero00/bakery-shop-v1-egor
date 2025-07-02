@@ -1,5 +1,7 @@
 import {div, echo, getRandomNumber, reverseArray} from "../src/utils/tools";
-import {isCategoryExist} from "../src/firebase/firebaseDBService";
+import {addCategory, isCategoryExist, removeCategory} from "../src/firebase/firebaseDBService";
+import { getApps, deleteApp } from 'firebase/app';
+import {Category} from "../src/utils/shop-types";
 
 describe('BakeryShop.tools', () => {
 
@@ -32,10 +34,38 @@ describe('BakeryShop.tools', () => {
 
 })
 
-// describe('BakeryShop.dbService', () => {
-//     test('isCategoryExists', () => {
-//         expect(isCategoryExist('bread')).resolves.toBeTruthy();
-//         expect(isCategoryExist('milk')).resolves.not.toBeTruthy();
-//     })
-// })
+
+describe('BakeryShop.dbService', () => {
+    afterAll(async () => {
+        await Promise.all(getApps().map(deleteApp));
+    });
+
+    test('isCategoryExists', async () => {
+        await expect(isCategoryExist('bread')).resolves.toBeTruthy();
+        await expect(isCategoryExist('milk')).resolves.not.toBeTruthy();
+    })
+
+    test('allCategoriesExist', async () => {
+        const categories = ['biscuits', 'bread', 'cake', 'croissants', 'pizza', 'pretzels', 'sweets', 'tart']
+        const arrayPromise = await Promise.all(categories.map(category => isCategoryExist(category)))
+        console.log(arrayPromise)
+        const allExist = arrayPromise.every(Boolean)
+        expect(allExist).toBe(true)
+    })
+
+    test('removeCategory', async () => {
+        const category = 'cake'
+        await removeCategory(category)
+        await expect(isCategoryExist(category)).resolves.toBe(false)
+
+    })
+
+    test('add category', async () => {
+        const category:Category = {category_name: 'cake'}
+        await addCategory(category)
+        await expect(isCategoryExist(category.category_name)).resolves.toBe(true)
+
+
+    })
+})
 

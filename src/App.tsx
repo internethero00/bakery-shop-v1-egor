@@ -6,7 +6,7 @@ import Customers from "./components/Customers.tsx";
 import Orders from "./components/Orders.tsx";
 import ShoppingCart from "./components/ShoppingCart.tsx";
 import Dairy from "./components/Dairy.tsx";
-import Bread from "./components/Bread.tsx";
+import Bread from "./components/Bread/Bread.tsx";
 import {navItems, productItems} from "./configurations/nav-config.ts";
 import ErrorPage from "./components/ErrorPage.tsx";
 import NavigatorDeskTop from "./components/navigation/NavigatorDeskTop.tsx";
