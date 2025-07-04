@@ -1,6 +1,6 @@
 import './App.css'
 import {Navigate, Route, Routes} from "react-router-dom";
-import {Paths, type ProductType, Roles, type RouteType} from "./utils/shop-types.ts";
+import {Paths, type ProductType, Roles, type RouteType, ShopCartProdType} from "./utils/shop-types.ts";
 import Home from "./components/Home.tsx";
 import Customers from "./components/Customers.tsx";
 import Orders from "./components/Orders.tsx";
@@ -17,6 +17,8 @@ import {useAppDispatch, useAppSelector} from "./redux/hooks.ts";
 import {useEffect} from "react";
 import {getProducts} from "./firebase/firebaseDBService.ts";
 import {prodsUpd} from "./redux/slices/productSlice.ts";
+import {resetCart, setCart} from "./redux/slices/cartSlice.ts";
+import {getCartProducts} from "./firebase/firebaseCartService.ts";
 
 
 
@@ -34,6 +36,18 @@ function App() {
 
 
     }
+
+    useEffect(() => {
+        if (!authUser || authUser.includes('admin'))
+            dispatch(resetCart())
+        else {
+            const subscription = getCartProducts(`${authUser}_collection`)
+            subscription.subscribe({
+                next: (cartProducts: ShopCartProdType[]) => {dispatch(setCart(cartProducts))},
+            })
+        }
+    }, []);
+
     useEffect(() => {
         const subscription = getProducts().subscribe({
             next: (prods: ProductType[]) => {
