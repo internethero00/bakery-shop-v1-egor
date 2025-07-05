@@ -46,7 +46,7 @@ function App() {
                 next: (cartProducts: ShopCartProdType[]) => {dispatch(setCart(cartProducts))},
             })
         }
-    }, []);
+    }, [authUser]);
 
     useEffect(() => {
         const subscription = getProducts().subscribe({
@@ -55,7 +55,7 @@ function App() {
             },
         })
         return () => {subscription.unsubscribe()}
-    }, []);
+    }, [authUser]);
 
     const getRoutes = () => {
         return navItems.filter(item =>

@@ -1,4 +1,4 @@
-import {doc, collection, getDoc, setDoc, deleteDoc, getCountFromServer} from 'firebase/firestore';
+import {doc, collection, getDoc, setDoc, deleteDoc} from 'firebase/firestore';
 import {db} from "../configurations/fireBase-config.ts";
 import {collectionData} from 'rxfire/firestore'
 import {ShopCartProdType} from "../utils/shop-types.ts";
@@ -19,6 +19,7 @@ export const addProductUnitToCart = async (collName: string, id: string) => {
     let count = 0;
     const temp = await getDoc(ref);
     const prodData = temp.data() as ShopCartProdType;
+    console.log(temp.data());
     if (prodData) {
         count = prodData.count;
     }

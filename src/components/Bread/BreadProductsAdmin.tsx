@@ -10,6 +10,7 @@
 import {useAppSelector} from "../../redux/hooks.ts";
 import {DataGrid, type GridColDef} from "@mui/x-data-grid";
 import {Avatar, Box} from "@mui/material";
+import {removeProduct} from "../../firebase/firebaseDBService.ts";
 
 const BreadProductsAdmin = () => {
     const {currProds} = useAppSelector(state => state.product)
@@ -25,6 +26,11 @@ const BreadProductsAdmin = () => {
                 <Avatar src={'/images/'+params.value}/>
             )
             } },
+        {field: 'actions', type: 'actions', flex:0.3, getActions: ({id}) => [
+                <img src={'/images/trash_can.jpg'} style={{width: '20px'}}
+                     onClick={() => removeProduct(id as string)}
+                     alt={'delete'}/>
+            ]}
     ]
     return (
         <Box>
