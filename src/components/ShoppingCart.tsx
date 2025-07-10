@@ -34,13 +34,11 @@ const ShoppingCart = () => {
         { field: 'amount', headerName: 'Amount in ILS', width: 90, flex: 0.4, editable: true},
         { field: 'img', width: 200, renderCell: (params) => {
                 return(
-                    <Avatar src={'/images/'+params.value} sx={{width: '100', height: '100', marginTop: '5px'}}/>
+                    <Avatar src={getImgUrl(params.value)} sx={{width: '100', height: '100', marginTop: '5px'}}/>
                 )
             } },
         {field: 'actions', type: 'actions', flex:0.3, getActions: ({id}) => [
-                <img src={'/images/trash_can.jpg'} style={{width: '20px'}}
-            onClick={() => removeProductFromCart(`${authUser}_collection`, id as string)}
-             alt={'delete'}/>
+                <TrashCan id={id} authUser={authUser}/>
             ]}
 
     ]
@@ -61,5 +59,7 @@ import {DataGrid, GridColDef} from "@mui/x-data-grid";
 
 
 import {Avatar, Box} from "@mui/material";
+import TrashCan from "./singIn/customIcons/TrashCan.tsx";
+import {getImgUrl} from "../utils/tools.ts";
 
 export default ShoppingCart;

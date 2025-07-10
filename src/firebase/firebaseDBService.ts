@@ -78,3 +78,8 @@ export const setProducts = async () => {
 export const getProducts = ():Observable<ProductType[]> => {
     return collectionData(prodColl) as Observable<ProductType[]>
 }
+
+export const updateProduct = async (newProduct: ProductType) => {
+    const ref = doc(prodColl, newProduct.id);
+    await setDoc(ref, newProduct);
+}

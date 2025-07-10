@@ -19,3 +19,7 @@ export const echo = (data: string) => {
 
     })
 }
+
+export const getImgUrl = (value: string) => {
+    return value.startsWith("http") ? value : '/images/' + value
+}

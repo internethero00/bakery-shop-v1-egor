@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import {useNavigate} from "react-router-dom";
 import {addProductUnitToCart, removeProductUnitToCart} from "../../firebase/firebaseCartService.ts";
+import {getImgUrl} from "../../utils/tools.ts";
 
 
 const BreadProductsUser = () => {
@@ -26,7 +27,7 @@ const BreadProductsUser = () => {
                     }}>
                         <CardMedia
                             sx={{height: 140}}
-                            image={"/images/" + item.img}
+                            image={getImgUrl(item.img)}
                             title={item.title}
                         />
                         <CardContent>
